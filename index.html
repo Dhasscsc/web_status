@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>தாஸ் சேவை நிலை மையம்</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Serif+Tamil:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F2EA;
+    --ledger-line:#DAD3C2;
+    --ink:#241F18;
+    --navy:#1F3A54;
+    --navy-deep:#152840;
+    --marigold:#E0983A;
+    --marigold-deep:#B9752A;
+    --stamp-red:#8C3B33;
+    --success:#3C6E52;
+    --muted:#6B6455;
+    --card-bg:#FFFFFF;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      repeating-linear-gradient(var(--paper), var(--paper) 27px, var(--ledger-line) 28px);
+    font-family:'Noto Sans Tamil','Inter',sans-serif;
+    color:var(--ink);
+    padding:0 0 60px 0;
+  }
+  header{
+    background:var(--navy-deep);
+    color:#F5F2EA;
+    padding:22px 24px 26px;
+    border-bottom:5px solid var(--marigold);
+    position:relative;
+  }
+  header .eyebrow{
+    font-size:12.5px;
+    letter-spacing:.06em;
+    color:#C9B98A;
+    font-weight:600;
+    text-transform:uppercase;
+  }
+  header h1{
+    font-family:'Noto Serif Tamil', serif;
+    font-size:26px;
+    margin:4px 0 2px;
+    font-weight:700;
+  }
+  header .sub{
+    font-size:13.5px;
+    color:#B9C6D4;
+  }
+  .stamp{
+    position:absolute;
+    right:24px;
+    top:20px;
+    border:2px solid var(--marigold);
+    color:var(--marigold);
+    padding:6px 12px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.05em;
+    transform:rotate(-4deg);
+    opacity:.85;
+  }
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    padding:22px 20px 0;
+  }
+  .toolbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-bottom:16px;
+  }
+  .search-box{
+    flex:1;
+    min-width:220px;
+    position:relative;
+  }
+  .search-box input{
+    width:100%;
+    padding:11px 14px;
+    border-radius:var(--radius);
+    border:1.5px solid #D9D2C0;
+    font-size:14.5px;
+    font-family:inherit;
+    background:var(--card-bg);
+  }
+  .search-box input:focus{outline:2px solid var(--navy); outline-offset:1px;}
+  .add-btn{
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    padding:11px 18px;
+    border-radius:var(--radius);
+    font-size:14px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .add-btn:hover{background:var(--navy-deep);}
+  .tabs{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .tab{
+    padding:7px 14px;
+    border-radius:20px;
+    border:1.5px solid #D9D2C0;
+    background:var(--card-bg);
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    color:var(--muted);
+  }
+  .tab.active{
+    background:var(--navy);
+    color:#fff;
+    border-color:var(--navy);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+    gap:14px;
+  }
+  .card{
+    background:var(--card-bg);
+    border:1px solid #E5DFCF;
+    border-radius:var(--radius);
+    padding:16px;
+    box-shadow:0 1px 2px rgba(0,0,0,.04);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    position:relative;
+  }
+  .card .cat-tag{
+    font-size:10.5px;
+    color:var(--marigold-deep);
+    font-weight:700;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+  }
+  .card h3{
+    margin:0;
+    font-size:16px;
+    font-weight:600;
+    line-height:1.35;
+  }
+  .card .note{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.4;
+    min-height:16px;
+  }
+  .card input.refno{
+    padding:8px 10px;
+    border-radius:8px;
+    border:1.3px solid #DCD5C4;
+    font-size:13.5px;
+    font-family:inherit;
+  }
+  .card .row{
+    display:flex;
+    gap:8px;
+    margin-top:auto;
+  }
+  .track-btn{
+    flex:1;
+    background:var(--marigold);
+    color:#2A1B04;
+    border:none;
+    padding:9px 10px;
+    border-radius:8px;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .track-btn:hover{background:var(--marigold-deep); color:#fff;}
+  .icon-btn{
+    background:none;
+    border:1.3px solid #DCD5C4;
+    color:var(--muted);
+    width:34px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .icon-btn:hover{border-color:var(--stamp-red); color:var(--stamp-red);}
+  .custom-badge{
+    position:absolute;
+    top:12px;
+    right:12px;
+    font-size:9.5px;
+    background:var(--success);
+    color:#fff;
+    padding:2px 7px;
+    border-radius:10px;
+    font-weight:700;
+  }
+  /* Ledger / history */
+  .ledger{
+    margin-top:30px;
+    background:var(--card-bg);
+    border:1px solid #E5DFCF;
+    border-radius:var(--radius);
+    padding:16px 18px;
+  }
+  .ledger h2{
+    font-size:15px;
+    margin:0 0 10px;
+    font-family:'Noto Serif Tamil',serif;
+    color:var(--navy-deep);
+    border-bottom:2px solid var(--marigold);
+    display:inline-block;
+    padding-bottom:4px;
+  }
+  .ledger table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+  .ledger th{
+    text-align:left;
+    color:var(--muted);
+    font-weight:600;
+    padding:6px 8px;
+    border-bottom:1.5px solid #E5DFCF;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+  }
+  .ledger td{
+    padding:7px 8px;
+    border-bottom:1px dashed #E5DFCF;
+  }
+  .empty{
+    color:var(--muted);
+    font-size:13px;
+    padding:8px;
+  }
+  /* Modal */
+  .overlay{
+    position:fixed;inset:0;background:rgba(20,16,10,.5);
+    display:none;align-items:center;justify-content:center;z-index:50;
+    padding:16px;
+  }
+  .overlay.open{display:flex;}
+  .modal{
+    background:var(--paper);
+    border-radius:12px;
+    padding:22px;
+    width:100%;
+    max-width:420px;
+    border:1px solid #D9D2C0;
+  }
+  .modal h3{
+    margin:0 0 14px;
+    font-family:'Noto Serif Tamil',serif;
+    color:var(--navy-deep);
+  }
+  .modal label{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--muted);
+    display:block;
+    margin:10px 0 4px;
+  }
+  .modal input, .modal select{
+    width:100%;
+    padding:9px 10px;
+    border-radius:8px;
+    border:1.3px solid #DCD5C4;
+    font-family:inherit;
+    font-size:14px;
+  }
+  .modal-actions{
+    display:flex;
+    gap:8px;
+    margin-top:18px;
+  }
+  .modal-actions button{
+    flex:1;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .save-btn{background:var(--navy); color:#fff;}
+  .cancel-btn{background:#E5DFCF; color:var(--ink);}
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+    margin-top:30px;
+  }
+  @media (max-width:480px){
+    .stamp{display:none;}
+    header h1{font-size:21px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">தாஸ் பொது சேவை மையம் · Thoothukudi</div>
+  <h1>சேவை நிலை ஒருங்கிணைப்பு மையம்</h1>
+  <div class="sub">அனைத்து அரசு சேவைகளின் status-ஐயும் ஒரே இடத்தில் track பண்ணுங்க</div>
+  <div class="stamp">DASS · REGISTRY</div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="சேவையை தேடுங்க... (எ.கா: Aadhaar, PAN)">
+    </div>
+    <button class="add-btn" onclick="openModal()">+ புதிய சேவை சேர்</button>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="ledger">
+    <h2>சமீபத்திய Tracking பதிவுகள்</h2>
+    <div id="historyWrap"></div>
+  </div>
+
+  <footer>தாஸ் பொது சேவை மையம் · 9843232324 · dhass4000@gmail.com — இந்த பட்டியல் local-ஆ browser-ல் சேமிக்கப்படுகிறது</footer>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3 id="modalTitle">புதிய சேவை சேர்</h3>
+    <label>சேவையின் பெயர்</label>
+    <input type="text" id="fName" placeholder="எ.கா: EWS சான்றிதழ்">
+    <label>வகை (Category)</label>
+    <input type="text" id="fCategory" placeholder="எ.கா: சான்றிதழ்கள்">
+    <label>Official Tracking Website URL</label>
+    <input type="text" id="fUrl" placeholder="https://...">
+    <label>குறிப்பு (விருப்பம்)</label>
+    <input type="text" id="fNote" placeholder="எ.கா: Application ID தேவை">
+    <div class="modal-actions">
+      <button class="cancel-btn" onclick="closeModal()">ரத்து செய்</button>
+      <button class="save-btn" onclick="saveService()">சேமி</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORE_KEY = 'dass_status_hub_services_v1';
+const HISTORY_KEY = 'dass_status_hub_history_v1';
+
+const defaultServices = [
+  {id:'aadhaar', name:'ஆதார் அட்டை (Aadhaar)', category:'அடையாள சான்றுகள்', url:'https://myaadhaar.uidai.gov.in/check-aadhaar-status', note:'Enrolment ID / SRN தேவை', custom:false},
+  {id:'pan', name:'பான் கார்டு (PAN)', category:'அடையாள சான்றுகள்', url:'https://tin.tin.nsdl.com/pantan/StatusTrack.html', note:'Acknowledgement / Coupon எண்', custom:false},
+  {id:'passport', name:'பாஸ்போர்ட் (Passport)', category:'அடையாள சான்றுகள்', url:'https://www.passportindia.gov.in/AppOnlineProject/statusTracker/trackStatusInput', note:'File Number தேவை', custom:false},
+  {id:'voterid', name:'வாக்காளர் அடையாள அட்டை', category:'அடையாள சான்றுகள்', url:'https://www.nvsp.in/', note:'Reference ID தேவை', custom:false},
+  {id:'dl', name:'ஓட்டுநர் உரிமம் (DL)', category:'வாகனம்', url:'https://parivahan.gov.in/parivahan//en/content/citizen-services', note:'Application எண் தேவை', custom:false},
+  {id:'rc', name:'வாகன பதிவு (RC)', category:'வாகனம்', url:'https://parivahan.gov.in/parivahan//en/content/citizen-services', note:'Application எண் தேவை', custom:false},
+  {id:'ration', name:'குடும்ப அட்டை (Ration Card)', category:'குடும்ப ஆவணங்கள்', url:'https://www.tnpds.gov.in/', note:'Application ID தேவை', custom:false},
+  {id:'birth', name:'பிறப்பு சான்றிதழ்', category:'சான்றிதழ்கள்', url:'https://www.tnesevai.tn.gov.in/', note:'Application எண் தேவை', custom:false},
+  {id:'death', name:'இறப்பு சான்றிதழ்', category:'சான்றிதழ்கள்', url:'https://www.tnesevai.tn.gov.in/', note:'Application எண் தேவை', custom:false},
+  {id:'income', name:'வருமான சான்றிதழ்', category:'சான்றிதழ்கள்', url:'https://www.tnesevai.tn.gov.in/', note:'Application எண் தேவை', custom:false},
+  {id:'community', name:'சமூக சான்றிதழ்', category:'சான்றிதழ்கள்', url:'https://www.tnesevai.tn.gov.in/', note:'Application எண் தேவை', custom:false},
+  {id:'nativity', name:'பூர்வீக சான்றிதழ்', category:'சான்றிதழ்கள்', url:'https://www.tnesevai.tn.gov.in/', note:'Application எண் தேவை', custom:false},
+  {id:'epfo', name:'EPFO பாஸ்புக் / கிளைம்', category:'நிதி', url:'https://www.epfindia.gov.in/site_en/index.php', note:'UAN எண் தேவை', custom:false},
+  {id:'gst', name:'GST ஆப்ளிகேஷன் நிலை', category:'நிதி', url:'https://www.gst.gov.in/', note:'ARN எண் தேவை', custom:false},
+  {id:'itr', name:'வருமான வரி Refund', category:'நிதி', url:'https://www.incometax.gov.in/iec/foportal/', note:'PAN + Assessment Year தேவை', custom:false},
+  {id:'employment', name:'வேலைவாய்ப்பு அலுவலக பதிவு', category:'மற்றவை', url:'https://www.tnvelaivaaippu.gov.in/', note:'Registration எண் தேவை', custom:false},
+  {id:'ptax', name:'சொத்து வரி (Property Tax)', category:'மற்றவை', url:'https://tnurbanepay.tn.gov.in/', note:'Assessment எண் தேவை', custom:false}
+];
+
+function loadServices(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw){
+      localStorage.setItem(STORE_KEY, JSON.stringify(defaultServices));
+      return [...defaultServices];
+    }
+    return JSON.parse(raw);
+  }catch(e){
+    return [...defaultServices];
+  }
+}
+function saveServices(list){
+  localStorage.setItem(STORE_KEY, JSON.stringify(list));
+}
+function loadHistory(){
+  try{
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveHistory(list){
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0,25)));
+}
+
+let services = loadServices();
+let history = loadHistory();
+let activeCategory = 'அனைத்தும்';
+
+function categories(){
+  const cats = Array.from(new Set(services.map(s=>s.category)));
+  return ['அனைத்தும்', ...cats];
+}
+
+function renderTabs(){
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = '';
+  categories().forEach(cat=>{
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (cat===activeCategory ? ' active' : '');
+    btn.textContent = cat;
+    btn.onclick = ()=>{ activeCategory = cat; renderTabs(); renderGrid(); };
+    tabsEl.appendChild(btn);
+  });
+}
+
+function renderGrid(){
+  const grid = document.getElementById('grid');
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  grid.innerHTML = '';
+  const filtered = services.filter(s=>{
+    const matchesCat = activeCategory==='அனைத்தும்' || s.category===activeCategory;
+    const matchesSearch = !q || s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q);
+    return matchesCat && matchesSearch;
+  });
+  if(filtered.length===0){
+    grid.innerHTML = '<div class="empty">எதுவும் கிடைக்கவில்லை. வேறு வார்த்தையில் தேடுங்க அல்லது புதிய சேவை சேருங்க.</div>';
+    return;
+  }
+  filtered.forEach(s=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      ${s.custom ? '<div class="custom-badge">CUSTOM</div>' : ''}
+      <div class="cat-tag">${s.category}</div>
+      <h3>${s.name}</h3>
+      <div class="note">${s.note || ''}</div>
+      <input type="text" class="refno" placeholder="Reference / Application எண் (விருப்பம்)" data-id="${s.id}">
+      <div class="row">
+        <button class="track-btn" data-id="${s.id}">நிலை பார்க்க →</button>
+        <button class="icon-btn" data-editid="${s.id}" title="Edit">✎</button>
+        ${s.custom ? `<button class="icon-btn" data-delid="${s.id}" title="Delete">🗑</button>` : ''}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  grid.querySelectorAll('.track-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.getAttribute('data-id');
+      const svc = services.find(x=>x.id===id);
+      const refInput = grid.querySelector(`input.refno[data-id="${id}"]`);
+      const ref = refInput ? refInput.value.trim() : '';
+      window.open(svc.url, '_blank');
+      history.unshift({name: svc.name, ref: ref || '—', time: new Date().toLocaleString('ta-IN')});
+      saveHistory(history);
+      renderHistory();
+    };
+  });
+  grid.querySelectorAll('[data-editid]').forEach(btn=>{
+    btn.onclick = ()=> openModal(btn.getAttribute('data-editid'));
+  });
+  grid.querySelectorAll('[data-delid]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.getAttribute('data-delid');
+      if(confirm('இந்த சேவையை நீக்கலாமா?')){
+        services = services.filter(s=>s.id!==id);
+        saveServices(services);
+        renderTabs();
+        renderGrid();
+      }
+    };
+  });
+}
+
+function renderHistory(){
+  const wrap = document.getElementById('historyWrap');
+  if(history.length===0){
+    wrap.innerHTML = '<div class="empty">இன்னும் எந்த சேவையையும் track பண்ணவில்லை.</div>';
+    return;
+  }
+  let rows = history.map(h=>`
+    <tr><td>${h.time}</td><td>${h.name}</td><td>${h.ref}</td></tr>
+  `).join('');
+  wrap.innerHTML = `
+    <table>
+      <tr><th>நேரம்</th><th>சேவை</th><th>Reference எண்</th></tr>
+      ${rows}
+    </table>
+  `;
+}
+
+let editingId = null;
+function openModal(id){
+  editingId = id || null;
+  const overlay = document.getElementById('overlay');
+  const title = document.getElementById('modalTitle');
+  if(id){
+    const svc = services.find(s=>s.id===id);
+    title.textContent = 'சேவையை Edit செய்';
+    document.getElementById('fName').value = svc.name;
+    document.getElementById('fCategory').value = svc.category;
+    document.getElementById('fUrl').value = svc.url;
+    document.getElementById('fNote').value = svc.note || '';
+  } else {
+    title.textContent = 'புதிய சேவை சேர்';
+    document.getElementById('fName').value = '';
+    document.getElementById('fCategory').value = '';
+    document.getElementById('fUrl').value = '';
+    document.getElementById('fNote').value = '';
+  }
+  overlay.classList.add('open');
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  editingId = null;
+}
+function saveService(){
+  const name = document.getElementById('fName').value.trim();
+  const category = document.getElementById('fCategory').value.trim() || 'மற்றவை';
+  const url = document.getElementById('fUrl').value.trim();
+  const note = document.getElementById('fNote').value.trim();
+  if(!name || !url){
+    alert('சேவையின் பெயரும் URL-ஆம் கட்டாயம் தேவை');
+    return;
+  }
+  if(editingId){
+    const svc = services.find(s=>s.id===editingId);
+    svc.name = name; svc.category = category; svc.url = url; svc.note = note;
+  } else {
+    const id = 'custom_' + Date.now();
+    services.push({id, name, category, url, note, custom:true});
+  }
+  saveServices(services);
+  closeModal();
+  renderTabs();
+  renderGrid();
+}
+
+document.getElementById('searchInput').addEventListener('input', renderGrid);
+document.getElementById('overlay').addEventListener('click', (e)=>{
+  if(e.target.id==='overlay') closeModal();
+});
+
+renderTabs();
+renderGrid();
+renderHistory();
+</script>
+</body>
+</html>
